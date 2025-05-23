@@ -13,7 +13,7 @@ bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 
 doctors = {
-    "Анварбек": "https://t.me/anvarbek20",
+    "Анварбек": "https://t.me/+998900619976",
     "Зокиров": "https://t.me/zokirovhb",
     "Доктор Сидоров": "https://t.me/doctor_sidorov",
 }
