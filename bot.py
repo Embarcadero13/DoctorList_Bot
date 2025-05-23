@@ -1,11 +1,11 @@
 import asyncio
 from aiogram import Bot, Dispatcher, types
-from aiogram.filters import Command
+import os
 
-API_TOKEN = "7936346773:AAE6WYPtp0POcgu_Tu8RmLhOJDlJ7-R5G2w"
+API_TOKEN = os.getenv("BOT_TOKEN")
 
 bot = Bot(token=API_TOKEN)
-dp = Dispatcher()
+dp = Dispatcher(bot)
 
 doctors = {
     "Анварбек": "https://t.me/anvarbek20",
@@ -13,7 +13,7 @@ doctors = {
     "Доктор Сидоров": "https://t.me/doctor_sidorov",
 }
 
-@dp.message(Command("start"))
+@dp.message(commands=["start"])
 async def send_welcome(message: types.Message):
     keyboard = types.InlineKeyboardMarkup()
     for name, link in doctors.items():
@@ -21,7 +21,7 @@ async def send_welcome(message: types.Message):
     await message.answer("Выберите человека из списка:", reply_markup=keyboard)
 
 async def main():
-    await dp.start_polling(bot)
+    await dp.start_polling()
 
 if __name__ == "__main__":
     asyncio.run(main())
