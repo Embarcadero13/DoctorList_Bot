@@ -14,7 +14,7 @@ dp = Dispatcher()
 
 doctors = {
     "Анварбек": "https://t.me/+998900619976",
-    "Зокиров": "https://t.me/zokirovhb",
+    "Зокиров": "https://t.me/+998901470208",
     "Доктор Сидоров": "https://t.me/doctor_sidorov",
 }
 
