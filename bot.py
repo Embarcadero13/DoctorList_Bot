@@ -11,8 +11,8 @@ if not API_TOKEN:
 bot = Bot(token=API_TOKEN)
 dp = Dispatcher()
 
-# Твой Telegram ID, чтобы получать уведомления (вставь сюда свой)
-ADMIN_ID = 5409762556  # <-- замени на свой настоящий Telegram user_id (число)
+# Твой Telegram ID (число), чтобы получать уведомления
+ADMIN_ID = 5409762556  # <-- Заменить на свой настоящий user_id
 
 doctors = {
     "🧑‍⚕️ Анварбек": "https://t.me/+998900619976",
@@ -35,10 +35,12 @@ def doctor_list():
 
 @dp.message(CommandStart())
 async def start_cmd(message: Message):
-    try:
-        await message.delete()
-    except Exception:
-        pass
+    # Удаление сообщения /start отключено для избежания ошибок
+    # try:
+    #     await message.delete()
+    # except Exception:
+    #     pass
+
     await message.answer(
         f"👋 Привет, {message.from_user.first_name}!\n\n"
         "Я помогу тебе связаться с нужным врачом.\n\n"
@@ -50,22 +52,27 @@ async def start_cmd(message: Message):
 async def handle_callback(call: CallbackQuery):
     if call.data == "show_doctors":
         await call.message.edit_text("🧾 Вот список врачей:", reply_markup=doctor_list())
+        await call.answer()
     elif call.data == "go_back":
         await call.message.edit_text("🔙 Вы вернулись в главное меню.", reply_markup=main_menu())
+        await call.answer()
     elif call.data == "help":
         await call.message.answer(
             "❓ Помощь\n"
             "Используй кнопки для навигации по боту.\n"
             "Если нужна дополнительная информация — пиши сюда."
         )
-        # Уведомление админу, что пользователь запросил помощь
         await bot.send_message(ADMIN_ID, f"Пользователь @{call.from_user.username or call.from_user.id} запросил помощь.")
+        await call.answer()
+    else:
+        await call.answer("Неизвестная команда", show_alert=True)
 
 # Перехват любых сообщений, чтобы пересылать их админу (кроме команд /start)
 @dp.message()
 async def forward_user_message(message: Message):
     if message.text and not message.text.startswith("/start"):
-        await bot.send_message(ADMIN_ID,
+        await bot.send_message(
+            ADMIN_ID,
             f"Сообщение от @{message.from_user.username or message.from_user.id}:\n{message.text}"
         )
 
